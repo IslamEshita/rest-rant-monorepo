@@ -1,17 +1,26 @@
-const router = require('express').Router()
-const db = require("../models")
+const router = require("express").Router();
+const db = require("../models");
+const bcrypt = require("bcrypt");
 
-const { User } = db
+const { User } = db;
 
-router.post('/', async (req, res) => {
-    const user = await User.create(req.body)
-    res.json(user)
-})
+router.post("/", async (req, res) => {
+  console.log("MAR: Got the request");
+  let { password, ...rest } = req.body;
 
+  console.log(password);
+  console.log(rest);
 
-router.get('/', async (req, res) => {
-    const users = await User.findAll()
-    res.json(users)
-})
+  const user = await User.create({
+    ...rest,
+    passwordDigest: await bcrypt.hash(password, 10),
+  });
+  res.json(user);
+});
 
-module.exports = router
+router.get("/", async (req, res) => {
+  const users = await User.findAll();
+  res.json(users);
+});
+
+module.exports = router;
