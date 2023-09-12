@@ -4,6 +4,21 @@ const bcrypt = require("bcrypt");
 
 const { User } = db;
 
+router.get("/profile", async (req, res) => {
+  // try {
+  //   let user = await User.findOne({
+  //     where: {
+  //       userId: __,
+  //     },
+  //   });
+  //   res.json(user);
+  // } catch {
+  //   res.json(null);
+  // }
+  console.log("In the GET method of profile");
+  console.log(req.session.userId);
+});
+
 router.post("/", async (req, res) => {
   let user = await User.findOne({
     where: { email: req.body.email },
@@ -17,6 +32,7 @@ router.post("/", async (req, res) => {
       message: `Could not find a user with the provided username and password`,
     });
   } else {
+    req.session.userId = user.userId;
     res.json({ user });
   }
 });
