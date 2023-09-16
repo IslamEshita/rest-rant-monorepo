@@ -5,16 +5,16 @@ const bcrypt = require("bcrypt");
 const { User } = db;
 
 router.get("/profile", async (req, res) => {
-  // try {
-  //   let user = await User.findOne({
-  //     where: {
-  //       userId: __,
-  //     },
-  //   });
-  //   res.json(user);
-  // } catch {
-  //   res.json(null);
-  // }
+  try {
+    let user = await User.findOne({
+      where: {
+        userId: req.session.userId,
+      },
+    });
+    res.json(user);
+  } catch {
+    res.json(null);
+  }
   console.log("In the GET method of profile");
   console.log(req.session.userId);
 });

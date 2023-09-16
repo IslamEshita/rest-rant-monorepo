@@ -14,7 +14,12 @@ app.use(
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
   })
 );
-app.use(cors());
+app.use(
+  cors({
+    origin: `http://localhost:${process.env.PORT}`,
+    credentials: true,
+  })
+);
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
