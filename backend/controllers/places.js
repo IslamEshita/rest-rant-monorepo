@@ -100,30 +100,21 @@ router.post("/:placeId/comments", async (req, res) => {
       .json({ message: `Could not find place with id "${placeId}"` });
   }
 
-  let currentUser;
-  try {
-    currentUser = await User.findOne({
-      where: { userId: req.session.userId },
-    });
-  } catch {
-    currentUser = null;
-  }
-
-  if (!currentUser) {
-    return res.status(404).json({
-      message: "You must be logged on to leave a rant or rave!",
-    });
+  if (!req.currentUser) {
+    return res
+      .status(404)
+      .json({ message: "You must be logged in to leave a rant or rave!" });
   }
 
   const comment = await Comment.create({
     ...req.body,
-    authorId: currentUser.userId,
+    authorId: req.currentUser.userId,
     placeId: placeId,
   });
 
   res.send({
     ...comment.toJSON(),
-    author: currentUser,
+    author: req.currentUser,
   });
 });
 

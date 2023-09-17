@@ -4,6 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
+const defineCurrentUser = require("./middleware/defineCurrentUser");
 const cookieSession = require("cookie-session");
 
 // Express Settings
@@ -23,6 +24,7 @@ app.use(
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(defineCurrentUser);
 
 // Controllers & Routes
 
